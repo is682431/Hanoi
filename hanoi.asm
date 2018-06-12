@@ -1,7 +1,7 @@
  .data
  
  .text
- 	addi $s0, $zero, 8		# number of disks n.
+ 	addi $s0, $zero, 8		# number of disks n, must be positive and not 0.
  	
  	# reserve memory starting on 10010000 as instrcuted on the file, this is where the disks will be loaded.
 	addi $s1, $zero, 0x1001		# \
@@ -41,74 +41,89 @@ fillA:	sw $a1, 0($a0)			# store n, n-1, n-2, n-3, on A.
 	jr $ra
 
 # Hanoi function, where a0 = number of disks, a1 = Initial rod, a2 = temporal rod and a3 = final rod.
-Hanoi:	bne $a0, $zero, Safe		# Case where n = 0.
-	jr $ra
+Hanoi:	#bne $a0, $zero, Safe		# Case where n = 0.
+	#jr $ra				# Commented for optimization, case when n = 0
 Safe:	bne $a0, $s4, if		# Case where n = 1.
 	addi $a1, $a1, -4
 	lw $t0, 0($a1)			#\
 	sw $zero, 0($a1)		# Move disk
 	sw $t0, 0($a3)			# |
-	add $v0, $zero, $zero		# |
-	addi $v1, $zero, 4		#/
+	add $a3, $a3, 4			# |
+	#add $v0, $zero, $zero		# |
+	#addi $v1, $zero, 4		#/
 	jr $ra
-if:	addi $sp, $sp, -20		# Reserve space in stack
+if:	addi $sp, $sp, -8		# Reserve space in stack
 	sw $a0, 0($sp)			#\
-	sw $a1, 4($sp)			# |
-	sw $a2, 8($sp)			# Save important values
-	sw $a3, 12($sp)			# |
-	sw $ra, 16($sp)			#/
+	#sw $a1, 4($sp)			# |
+	#sw $a2, 8($sp)			# Save important values
+	#sw $a3, 12($sp)		# |
+	sw $ra, 4($sp)			#/
 	addi $a0, $a0, -1		#\
-	lw $a2, 12($sp)			# Switch arguments
-	lw $a3, 8($sp)			#/
+	add $t0, $a2, $zero		# |
+	add $a2, $a3, $zero		# |
+	add $a3, $t0, $zero		# |
+	#lw $a2, 12($sp)		# Switch arguments
+	#lw $a3, 8($sp)			#/
 	
 	jal Hanoi			# Call Hanoi function
 	
-	add $a1, $a1, $v0
-	add $a3, $a3, $v1
-	sw $a1, 4($sp)			# Actualize values
-	sw $a3, 8($sp)			#/
+	#add $a1, $a1, $v0
+	#add $a3, $a3, $v1
+	#sw $a1, 4($sp)			# Actualize values
+	#sw $a3, 8($sp)			#/
+	
+	add $t0, $a2, $zero		# \
+	add $a2, $a3, $zero		# Switch arguments
+	add $a3, $t0, $zero		#/
 	
 	lw $a0, 0($sp)			#\
-	lw $a1, 4($sp)			# |
-	lw $a2, 8($sp)			# Restore important values
-	lw $a3, 12($sp)			# |
-	lw $ra, 16($sp)			#/
-	addi $sp, $sp, 20		# Free space in stack
+	#lw $a1, 4($sp)			# |
+	#lw $a2, 8($sp)			# Restore important values
+	#lw $a3, 12($sp)		# |
+	lw $ra, 4($sp)			#/
+	addi $sp, $sp, 8		# Free space in stack
 	
 	addi $a1, $a1, -4
 	lw $t0, 0($a1)			#\
 	sw $zero, 0($a1)		# Move disks
 	sw $t0, 0($a3)			# |
-	add $a1, $a1, $zero		# |
+	#add $a1, $a1, $zero		# |
 	addi $a3, $a3, 4		#/
 	
-	addi $sp, $sp, -20		# Reserve space in stack
+	addi $sp, $sp, -8		# Reserve space in stack
 	sw $a0, 0($sp)			#\
-	sw $a1, 4($sp)			# |
-	sw $a2, 8($sp)			# Save important values
-	sw $a3, 12($sp)			# |
-	sw $ra, 16($sp)			#/
+	#sw $a1, 4($sp)			# |
+	#sw $a2, 8($sp)			# Save important values
+	#sw $a3, 12($sp)		# |
+	sw $ra, 4($sp)			#/
 	addi $a0, $a0, -1		#\
-	lw $a1, 8($sp)			# |
-	lw $a2, 4($sp)			# Switch arguments
-	lw $a3, 12($sp)			#/
+	add $t0, $a1, $zero		# |
+	add $a1, $a2, $zero		# |
+	add $a2, $t0, $zero		# |
+	#lw $a1, 8($sp)			# |
+	#lw $a2, 4($sp)			# Switch arguments
+	#lw $a3, 12($sp)		#/
 	
 	jal Hanoi
 	
-	add $a1, $a1, $v0
-	add $a3, $a3, $v1
-	sw $a1, 8($sp)			# Actualize values
-	sw $a3, 12($sp)			#/
+	#add $a1, $a1, $v0
+	#add $a3, $a3, $v1
+	#sw $a1, 8($sp)			# Actualize values
+	#sw $a3, 12($sp)		#/
+	
+	add $t0, $a1, $zero		# \
+	add $a1, $a2, $zero		# Switch argumentes
+	add $a2, $t0, $zero		#/
 	
 	lw $a0, 0($sp)			#\
-	lw $a1, 4($sp)			# |
-	lw $a2, 8($sp)			# Restore important values
-	lw $a3, 12($sp)			# |
-	lw $ra, 16($sp)			#/
-	addi $sp, $sp, 20		# Free space in stack
+	#lw $a1, 4($sp)			# |
+	#lw $a2, 8($sp)			# Restore important values
+	#lw $a3, 12($sp)		# |
+	lw $ra, 4($sp)			#/
+	addi $sp, $sp, 8		# Free space in stack
 	
-	add $v0, $zero, $zero		# No feedback when reached end of function
-	add $v1, $zero, $zero		#/
+	#add $v0, $zero, $zero		# No feedback when reached end of function
+	#add $v1, $zero, $zero		#/
 	
 	jr $ra
 
