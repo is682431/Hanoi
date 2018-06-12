@@ -1,7 +1,7 @@
  .data
  
  .text
- 	addi $s0, $zero, 8		# number of disks n, must be positive and not 0.
+ 	addi $s0, $zero, 3		# number of disks n, must be positive and not 0.
  	
  	# reserve memory starting on 10010000 as instrcuted on the file, this is where the disks will be loaded.
 	addi $s1, $zero, 0x1001		# \
@@ -10,11 +10,11 @@
 	
 	addi $s2, $zero, 0x1001		# \
 	sll $s2, $s2, 16		# Loading B rod direction.
-	ori $s2, $s2, 0x0080		#/
+	ori $s2, $s2, 0x0020		#/
 	
 	addi $s3, $zero, 0x1001		# \
 	sll $s3, $s3, 16		# Loading C rod direction.
-	ori $s3, $s3, 0x0100		#/
+	ori $s3, $s3, 0x0040		#/
 	
 	addi $s4, $zero, 1		# Place 1 in a s1 for use in comparations.
 	
