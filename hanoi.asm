@@ -1,6 +1,7 @@
- .data
+ ####### Hanoi Towers ||| Made by Lopez Rizo Eduardo Jeremias ||| Cornejo Lara Juan Cristobal ||| Guillermo Roldan Gomez #######
+.data
  
- .text
+.text
  	addi $s0, $zero, 3		# number of disks n, must be positive and not 0.
  	
  	# reserve memory starting on 10010000 as instrcuted on the file, this is where the disks will be loaded.
