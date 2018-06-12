@@ -49,38 +49,27 @@ Safe:	bne $a0, $s4, if		# Case where n = 1.
 	lw $t0, 0($a1)			#\
 	sw $zero, 0($a1)		# Move disk
 	sw $t0, 0($a3)			# |
-	add $a3, $a3, 4			# |
-	#add $v0, $zero, $zero		# |
-	#addi $v1, $zero, 4		#/
+	add $a3, $a3, 4			#/
+	
 	jr $ra
 if:	addi $sp, $sp, -8		# Reserve space in stack
 	sw $a0, 0($sp)			#\
-	#sw $a1, 4($sp)			# |
-	#sw $a2, 8($sp)			# Save important values
-	#sw $a3, 12($sp)		# |
 	sw $ra, 4($sp)			#/
-	addi $a0, $a0, -1		#\
+	addi $a0, $a0, -1		#\ Store values
 	add $t0, $a2, $zero		# |
 	add $a2, $a3, $zero		# |
 	add $a3, $t0, $zero		# |
-	#lw $a2, 12($sp)		# Switch arguments
-	#lw $a3, 8($sp)			#/
+	
 	
 	jal Hanoi			# Call Hanoi function
 	
-	#add $a1, $a1, $v0
-	#add $a3, $a3, $v1
-	#sw $a1, 4($sp)			# Actualize values
-	#sw $a3, 8($sp)			#/
+	
 	
 	add $t0, $a2, $zero		# \
 	add $a2, $a3, $zero		# Switch arguments
 	add $a3, $t0, $zero		#/
 	
-	lw $a0, 0($sp)			#\
-	#lw $a1, 4($sp)			# |
-	#lw $a2, 8($sp)			# Restore important values
-	#lw $a3, 12($sp)		# |
+	lw $a0, 0($sp)			#\ Load important values
 	lw $ra, 4($sp)			#/
 	addi $sp, $sp, 8		# Free space in stack
 	
@@ -88,43 +77,30 @@ if:	addi $sp, $sp, -8		# Reserve space in stack
 	lw $t0, 0($a1)			#\
 	sw $zero, 0($a1)		# Move disks
 	sw $t0, 0($a3)			# |
-	#add $a1, $a1, $zero		# |
 	addi $a3, $a3, 4		#/
 	
 	addi $sp, $sp, -8		# Reserve space in stack
 	sw $a0, 0($sp)			#\
-	#sw $a1, 4($sp)			# |
-	#sw $a2, 8($sp)			# Save important values
-	#sw $a3, 12($sp)		# |
-	sw $ra, 4($sp)			#/
+	
+	sw $ra, 4($sp)			#/ Save important values
 	addi $a0, $a0, -1		#\
 	add $t0, $a1, $zero		# |
 	add $a1, $a2, $zero		# |
 	add $a2, $t0, $zero		# |
-	#lw $a1, 8($sp)			# |
-	#lw $a2, 4($sp)			# Switch arguments
-	#lw $a3, 12($sp)		#/
+	
 	
 	jal Hanoi
 	
-	#add $a1, $a1, $v0
-	#add $a3, $a3, $v1
-	#sw $a1, 8($sp)			# Actualize values
-	#sw $a3, 12($sp)		#/
 	
 	add $t0, $a1, $zero		# \
 	add $a1, $a2, $zero		# Switch argumentes
 	add $a2, $t0, $zero		#/
 	
 	lw $a0, 0($sp)			#\
-	#lw $a1, 4($sp)			# |
-	#lw $a2, 8($sp)			# Restore important values
-	#lw $a3, 12($sp)		# |
+	
 	lw $ra, 4($sp)			#/
 	addi $sp, $sp, 8		# Free space in stack
 	
-	#add $v0, $zero, $zero		# No feedback when reached end of function
-	#add $v1, $zero, $zero		#/
 	
 	jr $ra
 
